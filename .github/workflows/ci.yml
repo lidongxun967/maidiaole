@@ -32,7 +32,7 @@ jobs:
         nuitka --onefile --windows-icon-from-ico=web/favicon.ico --windows-console-mode=disable --plugin-enable=upx --include-data-dir=web=web --output-dir=dist main.pyw
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: application
         path: dist/main.exe
