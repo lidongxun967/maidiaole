@@ -30,7 +30,7 @@ jobs:
     - name: Build with Nuitka
       run: |
         # 添加详细日志和错误处理
-        nuitka --windows-icon-from-ico=web/favicon.ico --windows-console-mode=disable --include-data-dir=web=web --output-dir=dist main.pyw || exit 1
+        nuitka --onefile --plugin-enable=upx --windows-icon-from-ico=web/favicon.ico --windows-console-mode=disable --include-data-dir=web=web --output-dir=dist main.pyw || exit 1
         
         # 检查文件是否生成
         if (Test-Path -Path "dist\main.exe") {
