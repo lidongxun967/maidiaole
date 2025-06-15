@@ -33,10 +33,12 @@ jobs:
         nuitka --show-progress --show-scons --windows-icon-from-ico=web/favicon.ico --windows-console-mode=disable --include-data-dir=web=web --output-dir=dist main.pyw || exit 1
         
         # 检查文件是否生成
-        if not exist dist\main.exe (
+        if (Test-Path -Path "dist\main.exe") {
+          echo "main.exe found"
+        } else {
           echo "Error: main.exe not found!"
           exit 1
-        )
+        }
     
     - name: List build artifacts
       run: dir dist /s
