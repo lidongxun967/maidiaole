@@ -41,7 +41,7 @@ jobs:
         }
     
     - name: List build artifacts
-      run: dir dist /s
+      run: Get-ChildItem -Recurse dist
     
     - name: Upload artifact
       uses: actions/upload-artifact@v4
