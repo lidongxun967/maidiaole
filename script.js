@@ -10,9 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 预加载水印图片
     const watermarkImg = new Image();
-    watermarkImg.src = 'material.png';
+    watermarkImg.src = './material.png';
     let watermarkAspectRatio = 1;
-    let watermarkMinDimension = 0;
 
     watermarkImg.onload = function() {
         watermarkAspectRatio = watermarkImg.width / watermarkImg.height;
