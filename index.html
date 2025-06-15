@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卖掉了生成器</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        .upload-area:hover {
+            border-color: #2196F3;
+        }
+        .upload-area.active {
+            border-color: #4CAF50;
+            background-color: #f0fff4;
+        }
+        #fileInput {
+            display: none;
+        }
+        #preview {
+            max-width: 100%;
+            margin: 20px auto;
+            display: block;
+        }
+        .btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 20px auto;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #0b7dda;
+        }
+        .btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>卖掉了生成器</h1>
+        <div class="upload-area" id="dropZone">
+            <p>点击或拖拽图片到此处上传</p>
+            <input type="file" id="fileInput" accept="image/*">
+        </div>
+        <canvas id="preview"></canvas>
+        <button id="downloadBtn" class="btn" disabled>下载合成图片</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
