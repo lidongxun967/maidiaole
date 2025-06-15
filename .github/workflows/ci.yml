@@ -30,7 +30,7 @@ jobs:
     - name: Build with Nuitka
       run: |
         # 添加详细日志和错误处理
-        nuitka --onefile --assume-yes-for-downloads --windows-icon-from-ico=web/favicon.ico --windows-console-mode=disable --include-data-dir=web=web --output-dir=dist main.pyw  || exit 1
+        nuitka --onefile --assume-yes-for-downloads --windows-icon-from-ico=web/favicon.ico --windows-console-mode=disable --include-data-dir=web=web --output-dir=dist main.pyw || exit 1
         
         # 检查文件是否生成
         if (Test-Path -Path "dist\main.exe") {
@@ -39,7 +39,6 @@ jobs:
           echo "Error: main.exe not found!"
           exit 1
         }
-        upx --ultra-brute dist\main.exe
     
     - name: List build artifacts
       run: Get-ChildItem -Recurse dist
