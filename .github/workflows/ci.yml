@@ -29,10 +29,21 @@ jobs:
 
     - name: Build with Nuitka
       run: |
-        nuitka --onefile --windows-icon-from-ico=web/favicon.ico --windows-console-mode=disable --plugin-enable=upx --include-data-dir=web=web --output-dir=dist main.pyw
-
+        # 添加详细日志和错误处理
+        nuitka --show-progress --show-scons --windows-icon-from-ico=web/favicon.ico --windows-console-mode=disable --include-data-dir=web=web --output-dir=dist main.pyw || exit 1
+        
+        # 检查文件是否生成
+        if not exist dist\main.exe (
+          echo "Error: main.exe not found!"
+          exit 1
+        )
+    
+    - name: List build artifacts
+      run: dir dist /s
+    
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: application
         path: dist/main.exe
+        if-no-files-found: error
