@@ -46,6 +46,26 @@
             margin: 20px auto;
             display: block;
         }
+        .instructions {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        .size-control {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .size-control label {
+            margin-right: 10px;
+        }
+        .size-control input[type="range"] {
+            width: 200px;
+        }
+        .size-control span {
+            margin-left: 10px;
+            font-weight: bold;
+        }
         .btn {
             background-color: #2196F3;
             color: white;
@@ -54,8 +74,8 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
-            display: block;
-            margin: 20px auto;
+            display: inline-block;
+            margin: 10px 5px;
             transition: background-color 0.3s;
         }
         .btn:hover {
@@ -75,6 +95,12 @@
             <input type="file" id="fileInput" accept="image/*">
         </div>
         <canvas id="preview"></canvas>
+        <p class="instructions">点击图片选择水印位置</p>
+        <div class="size-control">
+            <label for="sizeSlider">水印大小:</label>
+            <input type="range" id="sizeSlider" min="10" max="150" value="100">
+            <span id="sizeValue">100%</span>
+        </div>
         <button id="downloadBtn" class="btn" disabled>下载合成图片</button>
     </div>
     <script src="script.js"></script>

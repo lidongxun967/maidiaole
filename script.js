@@ -5,15 +5,114 @@ document.addEventListener('DOMContentLoaded', () => {
     const downloadBtn = document.getElementById('downloadBtn');
     const ctx = preview.getContext('2d');
     let originalImage = null;
+    let watermarkPosition = null;
+    let userImageMinSide = 0; // 用户图片较小边尺寸
+    
+    // 预加载水印图片
+    const watermarkImg = new Image();
+    watermarkImg.src = 'material.png';
+    let watermarkAspectRatio = 1;
+    let watermarkMinDimension = 0;
 
+    watermarkImg.onload = function() {
+        watermarkAspectRatio = watermarkImg.width / watermarkImg.height;
+        watermarkMinDimension = Math.min(watermarkImg.width, watermarkImg.height);
+    };
+    
+    // 获取控件元素
+    const sizeSlider = document.getElementById('sizeSlider') || document.querySelector('.size-control input[type="range"]');
+    const sizeValue = document.getElementById('sizeValue') || document.querySelector('.size-control span');
+    let watermarkSizePercent = 50; // 默认50%
+
+    if (!sizeSlider || !sizeValue) {
+        console.error("滑块控件元素未找到");
+        const errorMsg = document.createElement('p');
+        errorMsg.style.color = 'red';
+        errorMsg.textContent = '错误：滑块控件未正确加载';
+        document.querySelector('.container').appendChild(errorMsg);
+    }
+    
     // 设置Canvas尺寸
     function setCanvasSize(width, height) {
         preview.width = width;
         preview.height = height;
         preview.style.display = 'block';
+        // 计算用户图片较小边
+        userImageMinSide = Math.min(width, height);
     }
-
-    // 处理文件选择
+    
+    // 更新滑块值显示（百分比）
+    function updateSizeValue() {
+        if (!sizeSlider || !sizeValue) return;
+        sizeValue.textContent = `${sizeSlider.value}%`;
+        watermarkSizePercent = parseInt(sizeSlider.value);
+    }
+    
+    // 初始化滑块
+    if (sizeSlider && sizeValue) {
+        sizeSlider.min = 10;
+        sizeSlider.max = 200;
+        sizeSlider.value = 50;
+        updateSizeValue();
+    }
+    
+    // 绘制合成图片
+    function drawCompositeImage() {
+        if (!originalImage) return;
+        
+        ctx.clearRect(0, 0, preview.width, preview.height);
+        ctx.drawImage(originalImage, 0, 0);
+        
+        if (watermarkPosition && watermarkImg.complete) {
+            // 计算水印较小边尺寸（基于用户图片较小边的百分比）
+            const watermarkMinSide = (watermarkSizePercent / 100) * userImageMinSide;
+            
+            // 计算实际尺寸（保持宽高比）
+            let width, height;
+            if (watermarkImg.width <= watermarkImg.height) {
+                width = watermarkMinSide;
+                height = width / watermarkAspectRatio;
+            } else {
+                height = watermarkMinSide;
+                width = height * watermarkAspectRatio;
+            }
+            
+            ctx.drawImage(
+                watermarkImg, 
+                watermarkPosition.x - width/2, 
+                watermarkPosition.y - height/2, 
+                width, 
+                height
+            );
+        }
+    }
+    
+    // 点击canvas添加水印
+    preview.addEventListener('click', (e) => {
+        if (!originalImage) return;
+        
+        const rect = preview.getBoundingClientRect();
+        const scaleX = preview.width / rect.width;
+        const scaleY = preview.height / rect.height;
+        
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
+        
+        watermarkPosition = {x, y};
+        drawCompositeImage();
+    });
+    
+    // 滑块事件监听
+    if (sizeSlider) {
+        sizeSlider.addEventListener('input', () => {
+            updateSizeValue();
+            if (watermarkPosition) {
+                drawCompositeImage();
+            }
+        });
+    }
+    
+    // 文件处理
     function handleFile(file) {
         if (!file.type.match('image.*')) {
             alert('请选择图片文件！');
@@ -25,41 +124,15 @@ document.addEventListener('DOMContentLoaded', () => {
             originalImage = new Image();
             originalImage.onload = function() {
                 setCanvasSize(originalImage.width, originalImage.height);
-                drawCompositeImage();
+                watermarkPosition = null;
                 downloadBtn.disabled = false;
+                drawCompositeImage(); // 初始化绘制
             };
             originalImage.src = e.target.result;
         };
         reader.readAsDataURL(file);
     }
-
-    // 绘制合成图片（原始图片 + 水印）
-    function drawCompositeImage() {
-        ctx.clearRect(0, 0, preview.width, preview.height);
-        ctx.drawImage(originalImage, 0, 0);
-        
-        const watermark = new Image();
-        watermark.onload = function() {
-            // 计算缩放比例（水印宽度=原图宽度50%）
-            const scale = originalImage.width * 0.5 / watermark.width;
-            const scaledWidth = watermark.width * scale;
-            const scaledHeight = watermark.height * scale;
-            
-            // 居中位置
-            const x = (preview.width - scaledWidth) / 2;
-            const y = (preview.height - scaledHeight) / 2;
-            
-            // 绘制缩放后的水印
-            ctx.drawImage(
-                watermark,
-                x, y,
-                scaledWidth,
-                scaledHeight
-            );
-        };
-        watermark.src = 'mdl.png';
-    }
-
+    
     // 事件监听
     fileInput.addEventListener('change', (e) => {
         if (e.target.files.length > 0) {
