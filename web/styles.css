@@ -1,0 +1,448 @@
+:root {
+    --primary: #0078D7;
+    --primary-dark: #106EBE;
+    --surface: rgba(255, 255, 255, 0.75);
+    --on-surface: #323130;
+    --success: #107C10;
+    --elevation-4: 0 2.3px 1.9px rgba(0, 0, 0, 0.02), 
+                    0 5.4px 4.3px rgba(0, 0, 0, 0.028), 
+                    0 9.7px 7.7px rgba(0, 0, 0, 0.035), 
+                    0 16.1px 12.8px rgba(0, 0, 0, 0.042), 
+                    0 27.2px 21.7px rgba(0, 0, 0, 0.05), 
+                    0 50px 40px rgba(0, 0, 0, 0.07);
+    --elevation-8: 0 4.6px 3.6px rgba(0, 0, 0, 0.024), 
+                    0 11.2px 8.9px rgba(0, 0, 0, 0.035), 
+                    0 21.1px 16.9px rgba(0, 0, 0, 0.046), 
+                    0 38px 30.4px rgba(0, 0, 0, 0.057), 
+                    0 71px 56.9px rgba(0, 0, 0, 0.07), 
+                    0 170px 136px rgba(0, 0, 0, 0.1);
+}
+
+/* 粒子背景 */
+.particle-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    display: none;
+}
+
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,120,215,0.3) 0%, rgba(0,120,215,0) 70%);
+    animation: float 15s infinite linear;
+}
+
+@keyframes float {
+    0% { transform: translateY(0) translateX(0); }
+    100% { transform: translateY(-100vh) translateX(100px); }
+}
+
+body {
+    font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+    margin: 0;
+    background: #ffffff;
+    color: var(--on-surface);
+    height: 100vh;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+}
+
+.app-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.control-panel {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 30px 20px;
+    box-shadow: var(--elevation-8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    position: relative;
+    z-index: 10;
+    margin: 20px;
+    width: 300px;
+    min-width: 300px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.preview-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow: auto;
+    position: relative;
+}
+
+#preview {
+    max-width: 100%;
+    max-height: 80vh;
+    display: block;
+    border-radius: 8px;
+    box-shadow: var(--elevation-4);
+    transition: all 0.3s;
+    cursor: move;
+}
+
+h1 {
+    color: var(--primary-dark);
+    text-align: center;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+    font-size: 32px;
+    position: relative;
+    width: 100%;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    border-radius: 2px;
+}
+
+.upload-area {
+    border: 2px dashed #a0a0a0;
+    border-radius: 12px;
+    padding: 50px 20px;
+    text-align: center;
+    margin: 30px 0;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: rgba(255, 255, 255, 0.5);
+    position: relative;
+    overflow: hidden;
+    min-height: 125px;
+    height: auto;
+    flex-shrink: 0;
+}
+
+.upload-area::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.upload-area:hover {
+    border-color: var(--primary);
+    box-shadow: var(--elevation-4);
+    transform: translateY(-4px);
+}
+
+.upload-area:hover::before {
+    transform: scaleX(1);
+}
+
+.upload-area.active {
+    border-color: var(--success);
+    background-color: rgba(240, 255, 244, 0.6);
+}
+
+.upload-area p {
+    font-size: 20px;
+    color: #5a5a5a;
+    margin: 0 0 15px 0;
+    transition: color 0.2s;
+    font-weight: 500;
+}
+
+.upload-area .icon {
+    font-size: 48px;
+    color: var(--primary);
+    margin-bottom: 15px;
+    display: block;
+    transition: all 0.3s;
+}
+
+.upload-area:hover p {
+    color: var(--primary-dark);
+}
+
+.upload-area:hover .icon {
+    transform: translateY(-5px);
+}
+
+#fileInput {
+    display: none;
+}
+
+#preview {
+    max-width: 100%;
+    margin: 25px auto;
+    display: block;
+    border-radius: 8px;
+    box-shadow: var(--elevation-4);
+    transition: all 0.3s;
+    cursor: move;
+}
+
+#preview:hover {
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.instructions {
+    text-align: center;
+    color: var(--on-surface);
+    font-size: 16px;
+    margin: 20px 0;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+.size-control {
+    margin: 30px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.controls-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.size-control label {
+    font-weight: 600;
+    color: var(--on-surface);
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.size-control input[type="range"] {
+    flex: 1;
+    height: 8px;
+    border-radius: 4px;
+    background: #e0e0e0;
+    outline: none;
+    -webkit-appearance: none;
+    transition: all 0.3s;
+}
+
+.size-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    border: 2px solid white;
+    transition: all 0.2s;
+}
+
+.size-control input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.25);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.4);
+}
+
+/* 新增数字输入框样式 */
+.size-control input[type="number"] {
+    width: 60px;
+    margin-left: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
+    background: white;
+    color: var(--on-surface);
+}
+
+.size-control span {
+    margin-left: 10px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    min-width: 45px;
+    display: inline-block;
+    font-size: 18px;
+}
+
+.btn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    display: inline-block;
+    margin: 15px 10px;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: var(--elevation-4);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.5px;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(255,255,255,0.3), rgba(255,255,255,0));
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+}
+
+.btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-4px);
+    box-shadow: var(--elevation-8);
+}
+
+.btn:hover::after {
+    transform: translateX(100%);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn:disabled {
+    background-color: #a0a0a0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* 加载动画 */
+.loader {
+    display: none;
+    width: 64px;
+    height: 64px;
+    margin: 20px auto;
+    position: relative;
+}
+
+.loader::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 4px solid rgba(0, 120, 215, 0.2);
+    border-radius: 50%;
+    border-top-color: var(--primary);
+    animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+/* 提示信息 */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--primary);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 8px;
+    box-shadow: var(--elevation-8);
+    z-index: 1000;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-weight: 500;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+/* 下载按钮容器 */
+.download-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+    
+    .control-panel {
+        width: auto;
+        min-width: auto;
+        margin: 10px;
+    }
+    
+    .preview-area {
+        padding: 10px;
+    }
+    
+    h1 {
+        font-size: 26px;
+    }
+    
+    .upload-area {
+        padding: 30px 15px;
+    }
+    
+    .size-control input[type="range"] {
+        width: 65%;
+    }
+    
+    .download-container {
+        margin-top: 15px;
+    }
+}
+/* 细滚动条样式 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 120, 215, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
