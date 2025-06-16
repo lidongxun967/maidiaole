@@ -19,8 +19,8 @@ def main():
     window = webview.create_window(
         title='卖掉了生成器',
         url=f'file:///{index_path}',
-        width=800,
-        height=600
+        width=1280,
+        height=720
     )
     webview.start()
 

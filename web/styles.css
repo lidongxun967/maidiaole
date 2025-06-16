@@ -134,22 +134,31 @@ h1::after {
     background: rgba(255, 255, 255, 0.5);
     position: relative;
     overflow: hidden;
-    min-height: 125px;
-    height: auto;
+    height:100px;
     flex-shrink: 0;
 }
 
-.upload-area::before {
+/* 新增圆形扩散动画效果 */
+.upload-area::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--primary);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(0, 120, 215, 0.2);
+    opacity: 0;
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+}
+
+.upload-area:hover::after {
+    width: 350px;
+    height: 350px;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
 }
 
 .upload-area:hover {
@@ -157,11 +166,6 @@ h1::after {
     box-shadow: var(--elevation-4);
     transform: translateY(-4px);
 }
-
-.upload-area:hover::before {
-    transform: scaleX(1);
-}
-
 .upload-area.active {
     border-color: var(--success);
     background-color: rgba(240, 255, 244, 0.6);
@@ -366,14 +370,16 @@ h1::after {
     100% { transform: rotate(360deg); }
 }
 
-/* 提示信息 */
+/* Windows 11风格提示信息 (右下角) */
 .toast {
     position: fixed;
     bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: var(--primary);
-    color: white;
+    right: 30px;
+    transform: translateX(100px);
+    background: rgba(255, 255, 255, 0.7);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    color: #000000;
     padding: 15px 30px;
     border-radius: 8px;
     box-shadow: var(--elevation-8);
@@ -381,10 +387,11 @@ h1::after {
     opacity: 0;
     transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     font-weight: 500;
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .toast.show {
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(0);
     opacity: 1;
 }
 
