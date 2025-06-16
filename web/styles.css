@@ -395,20 +395,32 @@ h1::after {
     margin-top: 20px;
 }
 
-/* 响应式调整 */
+/* 响应式调整 - 单栏模式 */
 @media (max-width: 768px) {
     .app-container {
         flex-direction: column;
+        overflow-y: auto; /* 统一滚动条 */
+        height: auto; /* 高度自适应 */
+    }
+    
+    .control-panel, .preview-area {
+        width: 100%;
+        min-width: auto;
+        margin: 0;
+        padding: 20px;
+        overflow: visible; /* 移除内部滚动 */
     }
     
     .control-panel {
-        width: auto;
-        min-width: auto;
-        margin: 10px;
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
     }
     
     .preview-area {
-        padding: 10px;
+        flex: none; /* 高度自适应 */
+        min-height: 60vh; /* 最小高度保证预览区域可见 */
     }
     
     h1 {
